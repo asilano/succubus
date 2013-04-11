@@ -1,6 +1,8 @@
 _A random generator based on a generalised Backus-Naur Form grammar_
 
-*Succubus* is a generator which takes stochastic paths through a 
+[![Build Status](https://travis-ci.org/asilano/succubus.png?branch=master)](https://travis-ci.org/asilano/succubus)
+
+**Succubus** is a generator which takes stochastic paths through a 
 generalised Backus-Naur Form grammar to produce random text. For instance, the following:
 
     grammar = Succubus::Grammar.new do
@@ -21,6 +23,11 @@ Succubus is a RubyGem. That means it's really easy to install. Simply run:
     gem install succubus
     
 and you're done.
+
+Compatability
+=============
+Succubus is tested against Ruby 1.9.3 and Ruby 2.0 (by Travis - see the little widget up to check we're still passing).
+I know of no reason it shouldn't work with Ruby 1.8.7 or 1.9.2 - I just haven't got a test environment that works there yet!
 
 Usage
 =====
@@ -68,3 +75,11 @@ To get started:
         
         puts grammar.execute(:silly_name)
         # Professor Purplepants
+        
+About that name...?
+===================
+Oh, why **Succubus**? Well, Backus-Naur is usually used to describe or verify legal sentences; 
+what you have here is something that uses Backup-Naur to _generate_ sentences. Which is kinda backwards. 
+"Backus", backwards, is "Sukcab"; it's just a short hop from there to Succubus.
+
+I did consider "Bacchus" - a sort of drunken Backus - but the gem name was taken.
