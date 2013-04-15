@@ -1,3 +1,9 @@
+require 'coveralls'
+Coveralls.wear! do
+	add_filter '/test/'
+	add_filter '/spec/'
+	add_filter '/examples/'
+end
 require 'minitest/autorun'
 require File.dirname(__FILE__) + '/../test/support/fixed_random'
 require 'succubus'

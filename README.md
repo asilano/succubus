@@ -1,6 +1,6 @@
 _A random generator based on a generalised Backus-Naur Form grammar_
 
-[![Build Status](https://travis-ci.org/asilano/succubus.png?branch=master)](https://travis-ci.org/asilano/succubus)
+[![Build Status](https://travis-ci.org/asilano/succubus.png?branch=master)](https://travis-ci.org/asilano/succubus)[![Coverage Status](https://coveralls.io/repos/asilano/succubus/badge.png?branch=master)](https://coveralls.io/r/asilano/succubus)
 
 **Succubus** is a generator which takes stochastic paths through a 
 generalised Backus-Naur Form grammar to produce random text. For instance, the following:
