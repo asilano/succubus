@@ -2,6 +2,8 @@
 *.rbc
 .bundle
 .config
+coverage/
+Gemfile.lock
 pkg/
 rdoc
 spec/reports
