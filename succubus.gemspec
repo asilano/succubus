@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.test_files  = Dir.glob('{test,spec}/**/*')
   s.add_development_dependency 'rake'
   s.add_development_dependency 'minitest'
-  s.add_development_dependency 'coveralls', :require => false
+  s.add_development_dependency 'coveralls'
 end
   
