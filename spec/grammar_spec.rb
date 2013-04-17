@@ -64,6 +64,17 @@ describe Succubus::Grammar do
       
       samples_must_be_used
     end
+    
+    it "should always produce the same string given a known seed" do
+      result = @grammar.execute(:base)
+      result.random_seed.wont_be_nil
+      
+      seed = result.random_seed
+      100.times { @grammar.execute(:base, seed).must_equal result }
+      
+      # We know from manual runs that the seed 42 produces "I have a white dog"
+      100.times { @grammar.execute(:base, 42).must_equal "I have a white dog" }
+    end
   end
   
   describe "failure cases" do

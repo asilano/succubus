@@ -9,8 +9,14 @@ module Succubus
       @errors = []
     end
     
-    def run(rule)
-      @result = invoke(rule)
+    def run(rule, seed=nil)
+      unless seed
+        srand()
+        seed = rand(0xffffffff)
+      end
+      
+      srand(seed)
+      @result = Result.new(seed, invoke(rule))
     end
     
     def invoke(rule)

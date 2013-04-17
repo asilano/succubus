@@ -1,5 +1,6 @@
 require 'succubus/grammar'
 require 'succubus/generator'
+require 'succubus/result'
 
 module Succubus
   class ParseError < RuntimeError

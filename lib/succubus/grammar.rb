@@ -1,5 +1,7 @@
 module Succubus
   class Grammar
+    attr_reader :last_seed
+    
     def initialize(&block)
       @rules = {}      
       @errors = []
@@ -20,9 +22,9 @@ module Succubus
       @rules[name] = choices
     end
     
-    def execute(start)
+    def execute(start, seed=nil)
       gen = Generator.new(@rules)
-      gen.run(start)
+      gen.run(start, seed)
       
       unless gen.errors.empty?
         ee = ExecuteError.new("Errors found executing")
@@ -31,6 +33,7 @@ module Succubus
         raise ee
       end
       
+      @last_seed = gen.result.random_seed
       gen.result
     end
   end
