@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/subset_asserts'
-
 module MiniTest::Assertions
   @@queued_samples = []
   
@@ -7,7 +5,7 @@ module MiniTest::Assertions
   def self.next_sample; @@queued_samples.shift; end
   
   def expect_sample(options, *choice)
-    assert_subset choice, options, "Can't queue #{options.inspect}.sample => #{choice}; choice not in options"
+    assert_includes_all choice, options, "Can't queue #{options.inspect}.sample => #{choice}; choice not in options"
     @@queued_samples << {:options => options, :choice => choice}
   end
   

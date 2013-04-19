@@ -1,11 +1,4 @@
-require 'coveralls'
-Coveralls.wear! do
-	add_filter '/test/'
-	add_filter '/spec/'
-	add_filter '/examples/'
-end
-require 'minitest/autorun'
-require File.dirname(__FILE__) + '/../test/support/fixed_random'
+require File.dirname(__FILE__) + '/spec_helper'
 require 'succubus'
 
 describe Succubus::Grammar do
@@ -89,7 +82,7 @@ describe Succubus::Grammar do
       end
       
       ex = bad_parse.must_raise Succubus::ParseError
-      ex.errors.must_have_same_elements_as ["Duplicate rule definition: colour", "Duplicate rule definition: base"]
+      ex.errors.must_equal_contents ["Duplicate rule definition: colour", "Duplicate rule definition: base"]
     end
     
     it "should fail to execute when rules are missing" do
@@ -101,7 +94,7 @@ describe Succubus::Grammar do
       expect_sample %w<black white>, "black"
       
       ex = proc {grammar.execute(:base)}.must_raise Succubus::ExecuteError
-      ex.errors.must_have_same_elements_as ["No such rule: size", "No such rule: pet"]
+      ex.errors.must_equal_contents ["No such rule: size", "No such rule: pet"]
       ex.partial.must_equal "I have a !!size!! black !!pet!!"
     end
   end
