@@ -1,17 +1,18 @@
 module Succubus
   class Grammar
     attr_reader :last_seed
-    
+    attr_reader :rules
+
     def initialize(&block)
       @rules = {}      
       @errors = []
       define_singleton_method(:create, block)
       create
       class << self ; undef_method :create ; end
-      
+
       unless @errors.empty?
         pe = ParseError.new("Errors found parsing")
-        pe.errors = @errors
+        pe.set_errors(@errors)
         raise pe
       end
     end
@@ -21,20 +22,19 @@ module Succubus
       @errors << "Duplicate rule definition: #{name}" if @rules.include? name
       @rules[name] = choices
     end
-    
+
     def execute(start, seed=nil)
-      gen = Generator.new(@rules)
-      gen.run(start, seed)
-      
-      unless gen.errors.empty?
+      result = Generator.run(self, start, seed)
+
+      unless result.errors.empty?
         ee = ExecuteError.new("Errors found executing")
-        ee.errors = gen.errors
-        ee.partial = gen.result
+        ee.set_errors(result.errors)
+        ee.set_partial(result)
         raise ee
       end
-      
-      @last_seed = gen.result.random_seed
-      gen.result
+
+      @last_seed = result.random_seed
+      result
     end
   end
 end
