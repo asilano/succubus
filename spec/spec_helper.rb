@@ -7,6 +7,7 @@ end
 require 'minitest/autorun'
 require 'minitest/great_expectations'
 
+if false
 require 'turn'
 Turn.config do |c|
  # use one of output formats:
@@ -22,5 +23,5 @@ Turn.config do |c|
  # use humanized test names (works only with :outline format)
  c.natural = true
 end
-
+end
 require File.dirname(__FILE__) + '/../test/support/fixed_random'
