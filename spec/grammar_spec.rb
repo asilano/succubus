@@ -49,13 +49,16 @@ describe Succubus::Grammar do
     end
     
     it "should produce a known string given pre-chosen randomness" do
-      expect_sample ["I have a <colour> <pet>", "<pet>s look best in <colour>"], "<pet>s look best in <colour>"
-      expect_sample ["cat", "dog"], "cat"
-      expect_sample ["black", "white"], "black"
+      # From ["I have a <colour> <pet>", "<pet>s look best in <colour>"], choose "<pet>s look best in <colour>"
+      expect_random 2, 1
+      # From ["cat", "dog"], choose "cat"
+      expect_random 2, 0
+      # From ["black", "white"], choose "black"
+      expect_random 2, 0
       
       @grammar.execute(:base).must_equal "cats look best in black"
       
-      samples_must_be_used
+      queue_must_be_used
     end
     
     it "should always produce the same string given a known seed" do
@@ -65,8 +68,8 @@ describe Succubus::Grammar do
       seed = result.random_seed
       100.times { @grammar.execute(:base, seed).must_equal result }
       
-      # We know from manual runs that the seed 42 produces "I have a white dog"
-      100.times { @grammar.execute(:base, 42).must_equal "I have a white dog" }
+      # We know from manual runs that the seed 42 produces "I have a white cat"
+      100.times { @grammar.execute(:base, 42).must_equal "I have a white cat" }
     end
   end
   
@@ -91,7 +94,8 @@ describe Succubus::Grammar do
         add_rule :colour, "black", "white"
       end
       
-      expect_sample %w<black white>, "black"
+      # From ["black", "white"], choose "black"
+      expect_random 2, 0
       
       ex = proc {grammar.execute(:base)}.must_raise Succubus::ExecuteError
       ex.errors.must_equal_contents ["No such rule: size", "No such rule: pet"]

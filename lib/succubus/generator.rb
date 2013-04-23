@@ -60,10 +60,16 @@ module Succubus
       end
 
       local_res = ""
-      # Pick an option, and scan it for all instances of (unescaped) <rules>
+      
+      # Pick an option. We can't use Array#sample, as its implementation differs
+      # between Ruby versions, so random seeds aren't portable.
+      choices = @rules[rule]
+      choice = choices[rand(choices.length)]
+      
+      # Scan it for all instances of (unescaped) <rules>
       # Each match will be an array containing the portion of string before
       # the <rule>; and the <rule> itself (which may be empty on the last match)
-      @rules[rule].sample.scan(/(.*?(?<!\\)(?:\\\\)*)(<.*?>|$)/) do |match|
+      choice.scan(/(.*?(?<!\\)(?:\\\\)*)(<.*?>|$)/) do |match|
         local_res << match[0]
         unless match[1].empty?
           local_res << invoke(match[1].match(/<(.*?)>/)[1].to_sym)
