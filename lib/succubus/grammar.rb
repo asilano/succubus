@@ -22,11 +22,9 @@ module Succubus
     # @raise [ParseError] if errors were encountered parsing the grammar in the
     #   supplied block
     def initialize(&block)
-      @rules = {}      
+      @rules = {}
       @errors = []
-      define_singleton_method(:create, block)
-      create
-      class << self ; undef_method :create ; end
+      instance_eval &block
 
       unless @errors.empty?
         pe = ParseError.new("Errors found parsing")
@@ -43,7 +41,7 @@ module Succubus
     #
     # @param [#to_sym] name name of the rule
     # @param [Array<String>] choices possible replacements for the rule. When +<name>+ is
-    #   encountered during execution of the {Grammar}, +<name>+ will be replaced by one of 
+    #   encountered during execution of the {Grammar}, +<name>+ will be replaced by one of
     #   the strings in +choices+ chosen uniformly at random.
     def add_rule(name, *choices)
       name = name.to_sym
@@ -54,7 +52,7 @@ module Succubus
     # Execute the grammar, producing a random {Result} string.
     #
     # The rule named +start+ is examined, and one of that rule's choices chosen. Then, for each
-    # rule reference tag +<name>+ in that choice, the tag is recursively replaced with one of 
+    # rule reference tag +<name>+ in that choice, the tag is recursively replaced with one of
     # the choices for the rule named +name+.
     #
     # @param [#to_sym] start name of the rule to start execution at

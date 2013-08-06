@@ -4,7 +4,7 @@ module Succubus
   #
   # @private
   class Generator
-  
+
     # Run through a given {Grammar}, starting at a given rule. Optionally
     # use a given random seed.
     #
@@ -60,19 +60,29 @@ module Succubus
       end
 
       local_res = ""
-      
+
       # Pick an option. We can't use Array#sample, as its implementation differs
       # between Ruby versions, so random seeds aren't portable.
       choices = @rules[rule]
       choice = choices[rand(choices.length)]
-      
-      # Scan it for all instances of (unescaped) <rules>
+
+      # Scan it for all instances of (possibly escaped) <rules>
       # Each match will be an array containing the portion of string before
       # the <rule>; and the <rule> itself (which may be empty on the last match)
-      choice.scan(/(.*?(?<!\\)(?:\\\\)*)(<.*?>|$)/) do |match|
+      choice.scan(/(.*?)(\\*<[^>]+?>|$)/) do |match|
         local_res << match[0]
         unless match[1].empty?
-          local_res << invoke(match[1].match(/<(.*?)>/)[1].to_sym)
+          if match[1] =~ /^(\\(?:\\\\)*)</
+            # Rule was escaped. Add the whole match literally, after unescaping
+            # the backslash sequences
+            local_res << match[1].gsub(/\\(\\|<)/, '\1')
+          else
+            # Rule was not escaped. Add any (even number of) backslashes,
+            # unescaped, then expand the rule.
+            match[1] =~ /((?:\\\\)*)/
+            local_res << $1.gsub(/\\\\/, '\\')
+            local_res << invoke(match[1].match(/<(.*?)>/)[1].to_sym)
+          end
         end
       end
 
